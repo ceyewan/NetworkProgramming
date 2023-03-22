@@ -7,7 +7,6 @@
 #include <time.h>
 #include <unistd.h>
 #include <signal.h>
-#include <wait.h>
 #include <assert.h>
 #include <sys/msg.h>
 #include <sys/ipc.h>
