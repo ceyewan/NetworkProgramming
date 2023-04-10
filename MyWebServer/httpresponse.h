@@ -19,7 +19,7 @@ public:
   void UnmapFile() { munmap(file_, file_stat_.st_size); };
   char *File();
   size_t FileLen() const;
-  void ErrorContent(Buffer &buff, std::string message);
+  void ErrorContent(Buffer &buff, const std::string &message);
   int Code() const { return code_; }
 
 private:
@@ -34,7 +34,9 @@ private:
   std::string path_;
   std::string src_dir_;
   char *file_{nullptr};
-  struct stat file_stat_{0};
+  struct stat file_stat_ {
+    0
+  };
   static const std::unordered_map<std::string, std::string> SUFFIX_TYPE;
   static const std::unordered_map<int, std::string> CODE_STATUS;
   static const std::unordered_map<int, std::string> CODE_PATH;

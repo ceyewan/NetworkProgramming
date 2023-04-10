@@ -1,14 +1,12 @@
 #include "httpconn.h"
-#include "log.h"
 #include <cerrno>
+#include <cstdio>
 #include <sys/uio.h>
 #include <unistd.h>
 
 const char *HTTPConn::srcDir;
 std::atomic<int> HTTPConn::userCount;
 bool HTTPConn::isET;
-
-
 
 void HTTPConn::Init(int sockFd, const sockaddr_in &addr) {
   userCount++;
@@ -32,9 +30,10 @@ ssize_t HTTPConn::Read(int *saveErrno) {
   ssize_t size = -1;
   do {
     size = read_buffer_.ReadFd(fd_, saveErrno);
-    log_info("read size: %d", size);
-    if (size <= 0) break;
-  } while(isET);
+    printf("read size: %zd", size);
+    if (size <= 0)
+      break;
+  } while (isET);
   return size;
 }
 

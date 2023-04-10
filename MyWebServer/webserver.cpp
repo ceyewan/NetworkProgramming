@@ -1,4 +1,5 @@
 #include "webserver.h"
+#include <cstdio>
 
 WebServer::WebServer(int port, int trigMode, int timeoutMS, bool OptLinger,
                      int sqlPort, const char *sqlUser, const char *sqlPwd,
@@ -15,7 +16,6 @@ WebServer::WebServer(int port, int trigMode, int timeoutMS, bool OptLinger,
                                 connPoolNum);
   InitEventMode(trigMode);
   if (!InitSocket()) {
-      log_info("close here!");
     isClose_ = true;
   }
 }
@@ -51,27 +51,35 @@ void WebServer::InitEventMode(int trigMode) {
 
 void WebServer::Start() {
   int timeMS = -1; /* epoll wait timeout == -1 无事件将阻塞 */
+  if (!isClose_)
+    printf("========Server Start =========\n");
   while (!isClose_) {
     if (timeoutMS_ > 0) {
       timeMS = static_cast<int>(timer_->GetNextTick());
     }
+    printf("TimeMS = %d\n", timeMS);
     int eventCnt = epoller_->Wait(timeMS);
     for (int i = 0; i < eventCnt; i++) {
       int fd = epoller_->GetEventFd(i);
       uint32_t events = epoller_->GetEvents(i);
       if (fd == listenFd_) {
+        printf("DealListen\n");
         DealListen();
+        printf("DealListenFinish\n");
       } else if (events & (EPOLLRDHUP | EPOLLHUP | EPOLLERR)) {
         assert(users_.count(fd) > 0);
+        printf("CloseConn\n");
         CloseConn(&users_[fd]);
       } else if (events & EPOLLIN) {
         assert(users_.count(fd) > 0);
+        printf("DealRead\n");
         DealRead(&users_[fd]);
       } else if (events & EPOLLOUT) {
         assert(users_.count(fd) > 0);
+        printf("DealWrite\n");
         DealWrite(&users_[fd]);
       } else {
-          log_error("Unexpected event!");
+        printf("Error events!\n");
       }
     }
   }
@@ -79,7 +87,7 @@ void WebServer::Start() {
 
 void WebServer::CloseConn(HTTPConn *client) {
   assert(client);
-    log_info("Client [%d] quit!", client->GetFd());
+  printf("Client [%d] quit!", client->GetFd());
   epoller_->DelFd(client->GetFd());
   client->Close();
 }
@@ -93,7 +101,7 @@ void WebServer::AddClient(int fd, sockaddr_in addr) {
   }
   epoller_->AddFd(fd, EPOLLIN | connEvent_);
   SetFdNonblock(fd);
-  log_info("Client[%d] in!", users_[fd].GetFd());
+  printf("Client[%d] in!", users_[fd].GetFd());
 }
 
 void WebServer::DealListen() {
@@ -109,7 +117,6 @@ void WebServer::DealListen() {
     }
     AddClient(fd, addr);
   } while (listenEvent_ & EPOLLET);
-    log_info("DealListen finished!");
 }
 
 void WebServer::DealRead(HTTPConn *client) {

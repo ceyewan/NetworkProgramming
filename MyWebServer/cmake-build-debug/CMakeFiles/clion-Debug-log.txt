@@ -1,4 +1,0 @@
-C:\WINDOWS\system32\wsl.exe --distribution Ubuntu-22.04 --exec /usr/bin/zsh -c "export CMAKE_COLOR_DIAGNOSTICS=ON && export CLION_IDE=TRUE && export JETBRAINS_IDE=TRUE && cd /home/ceyewan/CodeField/NetworkProgramming/MyWebServer/cmake-build-debug && /usr/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G 'CodeBlocks - Unix Makefiles' -S /home/ceyewan/CodeField/NetworkProgramming/MyWebServer -B /home/ceyewan/CodeField/NetworkProgramming/MyWebServer/cmake-build-debug"
--- Configuring done
--- Generating done
--- Build files have been written to: /home/ceyewan/CodeField/NetworkProgramming/MyWebServer/cmake-build-debug

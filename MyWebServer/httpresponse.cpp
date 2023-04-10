@@ -96,7 +96,7 @@ void HTTPResponse::AddContent(Buffer &buffer) {
     return;
   }
   int *mmRet =
-      (int *)mmap(0, file_stat_.st_size, PROT_READ, MAP_PRIVATE, srcFd, 0);
+      (int *)mmap(nullptr, file_stat_.st_size, PROT_READ, MAP_PRIVATE, srcFd, 0);
   if (*mmRet == -1) {
     ErrorContent(buffer, "File NotFound!");
     return;
@@ -119,7 +119,7 @@ std::string HTTPResponse::GetFileType() {
   return "text/plain";
 }
 
-void HTTPResponse::ErrorContent(Buffer &buff, std::string message) {
+void HTTPResponse::ErrorContent(Buffer &buff, const std::string& message)  {
   std::string body;
   std::string status;
   body += "<html><title>Error</title>";

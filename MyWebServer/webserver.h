@@ -11,7 +11,6 @@
 #include "httpconn.h"
 #include "threadpool.h"
 #include "timer.h"
-#include "log.h"
 
 class WebServer {
 public:

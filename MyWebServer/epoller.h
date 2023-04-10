@@ -2,8 +2,8 @@
 #define EPOLLER_H
 
 #include <cassert>
-#include <cstddef>
 #include <cerrno>
+#include <cstddef>
 #include <fcntl.h>
 #include <sys/epoll.h>
 #include <sys/types.h>
@@ -17,9 +17,9 @@ public:
   // 析构函数，close(epoll_)
   ~Epoller();
   // 将 fd 加入 epoll 的监控，监控类型为 events
-  bool AddFd(int fd, u_int32_t events) const;
+  bool AddFd(int fd, u_int32_t events);
   // 将 fd 的监控类型修改为 events
-  bool ModFd(int fd, u_int32_t events) const;
+  bool ModFd(int fd, u_int32_t events);
   // 将 fd 移除 epoll 的监控
   bool DelFd(int fd) const;
   // 检测所有的文件描述符，返回发生变化的文件描述符的数量，默认为非阻塞
@@ -33,4 +33,4 @@ private:
   std::vector<struct epoll_event> events_;
 };
 
-#endif //EPOLLER_H
+#endif // EPOLLER_H

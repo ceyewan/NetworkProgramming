@@ -6,7 +6,7 @@ Epoller::Epoller(int maxEvent) : epollfd_(epoll_create(8)), events_(maxEvent) {
 
 Epoller::~Epoller() { close(epollfd_); }
 
-bool Epoller::AddFd(int fd, u_int32_t events) const {
+bool Epoller::AddFd(int fd, u_int32_t events) {
   if (fd < 0)
     return false;
   epoll_event ev = {0};
@@ -15,7 +15,7 @@ bool Epoller::AddFd(int fd, u_int32_t events) const {
   return 0 == epoll_ctl(epollfd_, EPOLL_CTL_ADD, fd, &ev);
 }
 
-bool Epoller::ModFd(int fd, uint32_t events) const {
+bool Epoller::ModFd(int fd, uint32_t events) {
   if (fd < 0)
     return false;
   epoll_event ev = {0};
