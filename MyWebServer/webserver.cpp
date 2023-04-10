@@ -15,6 +15,7 @@ WebServer::WebServer(int port, int trigMode, int timeoutMS, bool OptLinger,
                                 connPoolNum);
   InitEventMode(trigMode);
   if (!InitSocket()) {
+    cout << "close" << endl;
     isClose_ = true;
   }
 }
@@ -43,7 +44,7 @@ void WebServer::InitEventMode(int trigMode) {
     connEvent_ |= EPOLLET;
     break;
   default:
-      assert(0);
+    assert(0);
   }
   HTTPConn::isET = (connEvent_ & EPOLLET);
 }
@@ -92,7 +93,7 @@ void WebServer::AddClient(int fd, sockaddr_in addr) {
 }
 
 void WebServer::DealListen() {
-  struct sockaddr_in addr{};
+  struct sockaddr_in addr {};
   socklen_t len = sizeof(addr);
   do {
     int fd = accept(listenFd_, (struct sockaddr *)&addr, &len);
@@ -173,7 +174,7 @@ int WebServer::SetFdNonblock(int fd) {
 
 bool WebServer::InitSocket() {
   int ret;
-  struct sockaddr_in addr{};
+  struct sockaddr_in addr {};
   if (port_ > 65535 || port_ < 1024) {
     return false;
   }
@@ -207,7 +208,7 @@ bool WebServer::InitSocket() {
     close(listenFd_);
     return false;
   }
-  ret = listen(listenFd_, 6);
+  ret = listen(listenFd_, 8);
   if (ret < 0) {
     close(listenFd_);
     return false;
@@ -222,10 +223,10 @@ bool WebServer::InitSocket() {
 }
 
 void WebServer::SendError(int fd, const char *info) {
-    assert(fd > 0);
-    ssize_t ret = send(fd, info, strlen(info), 0);
-    if (ret < 0) {
-        printf("Warning!\n");
-    }
-    close(fd);
+  assert(fd > 0);
+  ssize_t ret = send(fd, info, strlen(info), 0);
+  if (ret < 0) {
+    printf("Warning!\n");
+  }
+  close(fd);
 }
