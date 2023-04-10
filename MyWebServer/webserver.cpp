@@ -15,7 +15,7 @@ WebServer::WebServer(int port, int trigMode, int timeoutMS, bool OptLinger,
                                 connPoolNum);
   InitEventMode(trigMode);
   if (!InitSocket()) {
-    cout << "close" << endl;
+      log_info("close here!");
     isClose_ = true;
   }
 }
@@ -70,6 +70,8 @@ void WebServer::Start() {
       } else if (events & EPOLLOUT) {
         assert(users_.count(fd) > 0);
         DealWrite(&users_[fd]);
+      } else {
+          log_error("Unexpected event!");
       }
     }
   }
@@ -77,6 +79,7 @@ void WebServer::Start() {
 
 void WebServer::CloseConn(HTTPConn *client) {
   assert(client);
+    log_info("Client [%d] quit!", client->GetFd());
   epoller_->DelFd(client->GetFd());
   client->Close();
 }
@@ -90,6 +93,7 @@ void WebServer::AddClient(int fd, sockaddr_in addr) {
   }
   epoller_->AddFd(fd, EPOLLIN | connEvent_);
   SetFdNonblock(fd);
+  log_info("Client[%d] in!", users_[fd].GetFd());
 }
 
 void WebServer::DealListen() {
@@ -105,6 +109,7 @@ void WebServer::DealListen() {
     }
     AddClient(fd, addr);
   } while (listenEvent_ & EPOLLET);
+    log_info("DealListen finished!");
 }
 
 void WebServer::DealRead(HTTPConn *client) {

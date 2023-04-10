@@ -23,4 +23,4 @@ add_executable(MyWebServer
         timer.cpp
         timer.h
         webserver.cpp
-        webserver.h)
+        webserver.h log.h log.h log.cpp)

@@ -1,6 +1,6 @@
 #include "httpconn.h"
+#include "log.h"
 #include <cerrno>
-#include <sys/types.h>
 #include <sys/uio.h>
 #include <unistd.h>
 
@@ -32,6 +32,7 @@ ssize_t HTTPConn::Read(int *saveErrno) {
   ssize_t size = -1;
   do {
     size = read_buffer_.ReadFd(fd_, saveErrno);
+    log_info("read size: %d", size);
     if (size <= 0) break;
   } while(isET);
   return size;
