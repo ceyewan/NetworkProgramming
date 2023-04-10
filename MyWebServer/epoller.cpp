@@ -1,12 +1,12 @@
 #include "epoller.h"
 
 Epoller::Epoller(int maxEvent) : epollfd_(epoll_create(8)), events_(maxEvent) {
-  assert(epollfd_ >= 0 && events_.size() > 0);
+  assert(epollfd_ >= 0 && !events_.empty());
 }
 
 Epoller::~Epoller() { close(epollfd_); }
 
-bool Epoller::AddFd(int fd, u_int32_t events) {
+bool Epoller::AddFd(int fd, u_int32_t events) const {
   if (fd < 0)
     return false;
   epoll_event ev = {0};
@@ -16,7 +16,7 @@ bool Epoller::AddFd(int fd, u_int32_t events) {
   return ret;
 }
 
-bool Epoller::ModFd(int fd, uint32_t events) {
+bool Epoller::ModFd(int fd, uint32_t events) const {
   if (fd < 0)
     return false;
   epoll_event ev = {0};
@@ -25,7 +25,7 @@ bool Epoller::ModFd(int fd, uint32_t events) {
   return 0 == epoll_ctl(epollfd_, EPOLL_CTL_MOD, fd, &ev);
 }
 
-bool Epoller::DelFd(int fd) {
+bool Epoller::DelFd(int fd) const {
   if (fd < 0)
     return false;
   epoll_event ev = {0};

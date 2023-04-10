@@ -1,13 +1,16 @@
+#ifndef TIMER_H
+#define TIMER_H
+
 #include <algorithm>
 #include <arpa/inet.h>
-#include <assert.h>
+#include <cassert>
 #include <chrono>
 #include <cstddef>
 #include <functional>
 #include <iostream>
 #include <ostream>
 #include <queue>
-#include <time.h>
+#include <ctime>
 #include <unordered_map>
 
 typedef std::function<void()> TimeoutCallBack;
@@ -19,7 +22,7 @@ struct TimerNode {
   int id;
   TimeStamp expires;
   TimeoutCallBack callback;
-  bool operator<(const TimerNode &t) { return expires < t.expires; }
+  bool operator<(const TimerNode &t) const { return expires < t.expires; }
 };
 
 class TimerManager {
@@ -35,8 +38,8 @@ public:
   void Add(int id, int timeOut, const TimeoutCallBack &cb);
   // 调用回调函数后，删除
   void Work(int id);
-  // 调用 Tick 将所有超时连接删除，返回值等于 0 表示没有删除干净
-  int GetNextTick();
+  // 调用 Tick 将所有超时连接删除
+  size_t GetNextTick();
 
 private:
   // 将所有超时连接删除
@@ -55,4 +58,7 @@ private:
   // id 到 TimerNode 的映射
   std::unordered_map<int, size_t> hash_;
 };
+
+#endif //TIMER_H
+
 

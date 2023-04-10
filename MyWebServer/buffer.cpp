@@ -24,7 +24,7 @@ ssize_t Buffer::ReadFd(int fd, int *Errno) {
   const ssize_t size = readv(fd, iov, 2);
   if (size < 0) {
     *Errno = errno;
-  } else if (size <= writeable) {
+  } else if (static_cast<size_t>(size) <= writeable) {
     write_pos_ += size;
   } else {
     write_pos_ += writeable;
@@ -34,8 +34,8 @@ ssize_t Buffer::ReadFd(int fd, int *Errno) {
 }
 
 ssize_t Buffer::WriteFd(int fd, int *Errno) {
-  size_t readsize = write_pos_ - read_pos_;
-  ssize_t size = write(fd, CurReadPtr(), readsize);
+  size_t readable_size = write_pos_ - read_pos_;
+  ssize_t size = write(fd, CurReadPtr(), readable_size);
   if (size < 0) {
     *Errno = errno;
   } else {
@@ -59,4 +59,4 @@ void Buffer::Append(const char *str, size_t size) {
   write_pos_ += size;
 }
 
-void Buffer::Append(std::string str) { Append(str.c_str(), str.size()); }
+void Buffer::Append(const std::string& str) { Append(str.c_str(), str.size()); }

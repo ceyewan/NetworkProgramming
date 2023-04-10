@@ -135,3 +135,14 @@ void HTTPResponse::ErrorContent(Buffer &buff, std::string message) {
   buff.Append("Content-length: " + std::to_string(body.size()) + "\r\n\r\n");
   buff.Append(body);
 }
+
+char *HTTPResponse::File() {
+    return file_;
+}
+
+size_t HTTPResponse::FileLen() const {
+    return file_stat_.st_size;
+}
+
+
+

@@ -17,7 +17,7 @@
 
 class Buffer {
 public:
-  Buffer(int initBuffSize = 1024);
+  explicit Buffer(int initBuffSize = 1024);
   ~Buffer() = default;
   void Init();
   // 将可读部分的数据转化为 string
@@ -29,7 +29,7 @@ public:
   // 向 fd 中写入 str 数组，长度为 size，空间不够需要扩容
   void Append(const char *str, size_t size);
   // 重载 Append
-  void Append(std::string str);
+  void Append(const std::string& str);
   // 可读的区间大小
   size_t ReadableBytes() const { return write_pos_ - read_pos_; }
   // 可写的区间大小
@@ -44,8 +44,8 @@ public:
 
 private:
   std::vector<char> buffer_;
-  std::atomic<size_t> read_pos_;
-  std::atomic<size_t> write_pos_;
+  std::atomic<size_t> read_pos_{};
+  std::atomic<size_t> write_pos_{};
 };
 
 #endif // BUFFER_H

@@ -2,7 +2,7 @@
 
 void TimerManager::Delete(size_t i) {
   assert(0 <= i && i < heap_.size());
-  int n = heap_.size() - 1;
+  size_t n = heap_.size() - 1;
   SwapNode(i, n);
   hash_.erase(heap_.back().id);
   heap_.pop_back();
@@ -23,10 +23,10 @@ void TimerManager::SwapNode(size_t i, size_t j) {
 void TimerManager::ShiftUp(size_t i) {
   assert(0 <= i && i < heap_.size());
   size_t j = (i - 1) / 2;
-  if (j >= 0 && heap_[i] < heap_[j]) {
-    SwapNode(i, j);
-    ShiftUp(j);
-  }
+    if (heap_[i] < heap_[j]) {
+        SwapNode(i, j);
+        ShiftUp(j);
+    }
 }
 
 void TimerManager::ShiftDown(size_t i) {
@@ -86,15 +86,12 @@ void TimerManager::Tick() {
   }
 }
 
-int TimerManager::GetNextTick() {
+size_t TimerManager::GetNextTick() {
   Tick();
   size_t res = -1;
   if (!heap_.empty()) {
     res = std::chrono::duration_cast<MS>(heap_.front().expires - Clock::now())
               .count();
-    if (res < 0) {
-      res = 0;
-    }
   }
   return res;
 }

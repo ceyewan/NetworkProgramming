@@ -14,7 +14,7 @@ void SqlConnPool::Init(const char *host, int port, const char *user,
     assert(sql);
     sql = mysql_real_connect(sql, host, user, pwd, dbName, port, nullptr, 0);
     assert(sql);
-    connn_queue_.push(sql);
+    conn_queue_.push(sql);
   }
   MAX_CONN_ = connSize;
   sem_init(&sem_, 0, MAX_CONN_);
@@ -22,27 +22,27 @@ void SqlConnPool::Init(const char *host, int port, const char *user,
 
 MYSQL *SqlConnPool::GetConn() {
   MYSQL *sql = nullptr;
-  if (connn_queue_.empty())
+  if (conn_queue_.empty())
     return nullptr;
   sem_wait(&sem_);
   std::lock_guard<std::mutex> locker(mutex_);
-  sql = connn_queue_.front();
-  connn_queue_.pop();
+  sql = conn_queue_.front();
+  conn_queue_.pop();
   return sql;
 }
 
 void SqlConnPool::FreeConn(MYSQL *sql) {
   assert(sql);
   std::lock_guard<std::mutex> locker(mutex_);
-  connn_queue_.push(sql);
+  conn_queue_.push(sql);
   sem_post(&sem_);
 }
 
 void SqlConnPool::ClosePool() {
   std::lock_guard<std::mutex> locker(mutex_);
-  while (!connn_queue_.empty()) {
-    auto it = connn_queue_.front();
-    connn_queue_.pop();
+  while (!conn_queue_.empty()) {
+    auto it = conn_queue_.front();
+    conn_queue_.pop();
     mysql_close(it);
   }
   mysql_library_end();
@@ -50,5 +50,5 @@ void SqlConnPool::ClosePool() {
 
 int SqlConnPool::GetFreeConnCount() {
   std::lock_guard<std::mutex> locker(mutex_);
-  return connn_queue_.size();
+  return conn_queue_.size();
 }

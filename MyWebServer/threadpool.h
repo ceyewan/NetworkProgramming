@@ -25,8 +25,8 @@ private:
   struct Pool {
     std::mutex mutex;
     std::condition_variable cond;
-    bool close;
-    std::queue<std::function<void()>> tasks;
+      bool close{};
+      std::queue<std::function<void()>> tasks;
   };
   std::shared_ptr<Pool> pool_;
 };

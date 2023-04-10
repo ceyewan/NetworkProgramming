@@ -1,6 +1,6 @@
 #include <arpa/inet.h>
-#include <assert.h>
-#include <errno.h>
+#include <cassert>
+#include <cerrno>
 #include <fcntl.h> // fcntl()
 #include <netinet/in.h>
 #include <sys/socket.h>
@@ -30,7 +30,7 @@ private:
   void DealWrite(HTTPConn *client);
   void DealRead(HTTPConn *client);
 
-  void SendError(int fd, const char *info);
+  static void SendError(int fd, const char *info);
   void ExtentTime(HTTPConn *client);
   void CloseConn(HTTPConn *client);
 
@@ -46,11 +46,11 @@ private:
   bool openLinger_;
   int timeoutMS_; /* 毫秒MS */
   bool isClose_;
-  int listenFd_;
+  int listenFd_{};
   char *srcDir_;
 
-  uint32_t listenEvent_;
-  uint32_t connEvent_;
+  uint32_t listenEvent_{};
+  uint32_t connEvent_{};
 
   std::unique_ptr<TimerManager> timer_;
   std::unique_ptr<ThreadPool> threadpool_;

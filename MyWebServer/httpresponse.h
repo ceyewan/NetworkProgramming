@@ -10,7 +10,7 @@
 
 class HTTPResponse {
 public:
-  HTTPResponse();
+  HTTPResponse() = default;
   ~HTTPResponse() { UnmapFile(); };
 
   void Init(const std::string &srcDir, std::string &path,
@@ -31,8 +31,8 @@ private:
 
   int code_{-1};
   bool is_keep_alive_{false};
-  std::string path_{""};
-  std::string src_dir_{""};
+  std::string path_;
+  std::string src_dir_;
   char *file_{nullptr};
   struct stat file_stat_{0};
   static const std::unordered_map<std::string, std::string> SUFFIX_TYPE;
