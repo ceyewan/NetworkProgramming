@@ -1,6 +1,3 @@
-*
-!*.*
-!*/
+MyWebServer/.idea/*
 
-
-*.out
+MyWebServer/cmake-build-debug/*

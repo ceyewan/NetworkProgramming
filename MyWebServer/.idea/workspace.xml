@@ -21,13 +21,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6bd882d8-880d-4c38-85e7-235cdc9799dc" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/log.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/log.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/httpconn.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/httpconn.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webserver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/webserver.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webserver.h" beforeDir="false" afterPath="$PROJECT_DIR$/webserver.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -122,7 +116,7 @@
       <option name="presentableId" value="Default" />
       <updated>1681137011052</updated>
       <workItem from="1681137012125" duration="7302000" />
-      <workItem from="1681178947153" duration="2978000" />
+      <workItem from="1681178947153" duration="3147000" />
     </task>
     <servers />
   </component>
